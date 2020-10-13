@@ -15,11 +15,15 @@ GREEN = (0, 255, 0)
 MAGENTA = (255, 0, 255)
 CYAN = (0, 255, 255)
 BLACK = (0, 0, 0)
-COLORS = [RED, BLUE, YELLOW, GREEN, MAGENTA, CYAN]
+a1 = (randint(1, 255), randint(1, 255), randint(1, 255))
+a2 = (randint(1, 255), randint(1, 255), randint(1, 255))
+a3 = (randint(1, 255), randint(1, 255), randint(1, 255))
+a4 = (randint(1, 255), randint(1, 255), randint(1, 255))
+COLORS = [RED, BLUE, YELLOW, GREEN, MAGENTA, CYAN, a1, a2, a3, a4]
 
 global score
 score = 0
-N = 5
+N = 10
 M = 10
 Data = []
 CData = []
@@ -32,7 +36,7 @@ def new_ball():
     r = randint(30, 50)
     vx = randint(-5, +5)
     vy = randint(-5, +5)
-    color = COLORS[randint(0, 5)]
+    color = COLORS[randint(0, len(COLORS)-1)]
     Array = [x, y, r, vx, vy, color]
 
 
@@ -59,7 +63,7 @@ def new_cloud():
     m0 = randint(1, 4)
     vx0 = randint(20, 30) / 10
     A  = randint(30, 300)
-    color = COLORS[randint(0, 5)]
+    color = COLORS[randint(0, len(COLORS)-1)]
     CArray = [x0, y0, A, vx0, yst,  m0, color]
 
 
