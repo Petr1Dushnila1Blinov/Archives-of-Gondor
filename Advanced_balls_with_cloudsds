@@ -19,15 +19,16 @@ BLACK = (0, 0, 0)
 ROYAL_CYAN = (110, 238, 255)
 WHITE = (255, 255, 255)
 GREY = (171, 171, 171)
-COLORS = [RED, BLUE, YELLOW, GREEN, MAGENTA, CYAN]
+COLORS = [RED, BLUE, YELLOW, GREEN, MAGENTA, CYAN, (randint(1, 255), randint(1, 255), randint(1, 255)),
+          (randint(1, 255), randint(1, 255), randint(1, 255))]
 
-sc = 0  # Счёт игрока
-s = 0  # Число очков без штрафа за промахи
-mimo = 0   # Число штрафов
-N = 5  # Количество шаров на экране
-K = 4  # Количество облаков на экране
-V = 4  # Линейная скорость шаров и четверть линейной скорости гравитационных центров обращения облаков
-W = 2  # Угловая скорость обращения облаков X100
+sc = 0    # Счёт игрока
+s = 10    # Число очков без штрафа за промахи
+mimo = 0  # Число штрафов
+N = 15    # Количество шаров на экране
+K = 10    # Количество облаков на экране
+V = 4     # Линейная скорость шаров и четверть линейной скорости гравитационных центров обращения облаков
+W = 2     # Угловая скорость обращения облаков X100
 
 
 def new_ball():
@@ -41,58 +42,9 @@ def new_ball():
     r = randint(30, 50)
     Vx = randint(-V, V)
     Vy = randint(-V, V)
-    color = COLORS[randint(0, 5)]
+    color = COLORS[randint(0, len(COLORS) - 1)]
     circle(screen, color, (x, y), r)
     Array = [x, y, r, color, Vx, Vy]
-
-
-def new_cloud(m):
-    """
-       Рисует облако в произвольной точке экрана и задаёт случайные значения для скорости центра обращения
-       угловой скорости обращения, радиуса кривизны и записывает данные облака в список Cloud
-    """
-    global Cloud
-    r = int(20 * m)
-
-    x0 = randint(100, 700)
-    y0 = randint(100, 500)
-
-    Vx = int(randint(-V, V) // 4)
-    Vy = int(randint(-V, V) // 4)
-
-    w = randint(-W, W) / 100
-
-    varphi = 0                          # Начальная фаза колебаний
-
-    xr = randint(100, 800)
-    yr = randint(100, 400)
-    R = randint(50, 150)                # Радус кривизны
-
-    a = x0
-    b = y0 + r
-    circle(screen, WHITE, (a, b), r, 0)
-    circle(screen, GREY, (a, b), r + 1, 1)
-    a = x0 + r
-    circle(screen, WHITE, (a, b), r, 0)
-    circle(screen, GREY, (a, b), r + 1, 1)
-    a = x0 + 2 * r
-    b = y0 + r
-    circle(screen, WHITE, (a, b), r, 0)
-    circle(screen, GREY, (a, b), r + 1, 1)
-    a = x0 + 3 * r
-    b = y0 + r - 2
-    circle(screen, WHITE, (a, b), r, 0)
-    circle(screen, GREY, (a, b), r + 1, 1)
-    a = x0 + 2 * r
-    b = y0
-    circle(screen, WHITE, (a, b), r, 0)
-    circle(screen, GREY, (a, b), r + 1, 1)
-    a = x0 + r
-    b = y0 + 1
-    circle(screen, WHITE, (a, b), r, 0)
-    circle(screen, GREY, (a, b), r + 1, 1)
-
-    Cloud = [x0, y0, xr, yr, w, R, varphi, Vx, Vy]
 
 
 def cloud(x0, y0, m):
@@ -126,12 +78,37 @@ def cloud(x0, y0, m):
     circle(screen, WHITE, (a, b), r, 0)
     circle(screen, GREY, (a, b), r + 1, 1)
 
+def new_cloud(m):
+    """
+       Рисует облако в произвольной точке экрана и задаёт случайные значения для скорости центра обращения
+       угловой скорости обращения, радиуса кривизны и записывает данные облака в список Cloud
+    """
+    global Cloud
+    r = int(20 * m)
+
+    x0 = randint(100, 700)
+    y0 = randint(100, 500)
+
+    Vx = int(randint(-V, V) // 4)
+    Vy = int(randint(-V, V) // 4)
+
+    w = randint(-W, W) / 100
+
+    varphi = 0  # Начальная фаза колебаний
+
+    xr = randint(100, 800)
+    yr = randint(100, 400)
+    R = randint(50, 150)  # Радус кривизны
+
+    cloud(x0, y0, 1)
+
+    Cloud = [x0, y0, xr, yr, w, R, varphi, Vx, Vy]
 
 def score():
     """
             Функция выводит на экран очки игрока и условия игры
     """
-    polygon(screen, ROYAL_CYAN, [(0, 0), (300, 0), (300, 110), (0, 110)] )
+    polygon(screen, ROYAL_CYAN, [(0, 0), (300, 0), (300, 110), (0, 110)])
     rect(screen, YELLOW, (0, 0, 300, 110), 3)
     rect(screen, YELLOW, (0, 0, 150, 110), 3)
     rect(screen, YELLOW, (0, 0, 150, 45), 3)
@@ -180,8 +157,8 @@ def click(event):
     """
     global s, mimo, sc
     Mim = True
-    p = 0                  # Переменная отвечает за число попаданий по шарам.
-    z = 0                  # Переменная отвечает за число попаданий по облакам.
+    p = 0  # Переменная отвечает за число попаданий по шарам.
+    z = 0  # Переменная отвечает за число попаданий по облакам.
     for j in range(0, N):
         if ((event.pos[0] - D[j][0]) ** 2 + (event.pos[1] - D[j][1]) ** 2) <= D[j][2] ** 2:
             p += 1
@@ -190,10 +167,10 @@ def click(event):
             D[j][1] = randint(100, 500)
             D[j][4] = randint(-V, V)
             D[j][5] = randint(-V, V)
-            D[j][3] = COLORS[randint(0, 5)]
+            D[j][3] = COLORS[randint(0, len(COLORS) - 1)]
             Mim = False
     for h in range(0, K):
-        if ((event.pos[0] - (C[h][0]+25)) ** 2 + (event.pos[1] - (C[h][1]+18)) ** 2) <= 35 ** 2:
+        if ((event.pos[0] - (C[h][0] + 25)) ** 2 + (event.pos[1] - (C[h][1] + 18)) ** 2) <= 35 ** 2:
             z += 1
             pygame.display.update()
             C[h][0] = randint(100, 700)
@@ -221,7 +198,6 @@ def click(event):
 
 start()  # Начало работы основной программы
 
-
 pygame.display.update()
 clock = pygame.time.Clock()
 finished = False
@@ -241,10 +217,10 @@ while not finished:
         # Условия для отражения линейных скоростей шаров со сменой цвета при ударе о стену
         if (D[i][0] + D[i][2] > 1200) or (D[i][0] < 0 + D[i][2]):
             D[i][4] = -D[i][4]
-            D[i][3] = COLORS[randint(0, 5)]
+            D[i][3] = COLORS[randint(0, len(COLORS) - 1)]
         if (D[i][1] + D[i][2] > 600) or (D[i][1] < 0 + D[i][2]):
             D[i][5] = -D[i][5]
-            D[i][3] = COLORS[randint(0, 5)]
+            D[i][3] = COLORS[randint(0, len(COLORS) - 1)]
         circle(screen, D[i][3], (D[i][0], D[i][1]), D[i][2])
     # Рисуем движение облаков в виде суммы поступательного и колебательного движений
     for i in range(0, K):
