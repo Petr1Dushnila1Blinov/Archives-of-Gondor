@@ -5,7 +5,7 @@ import numpy as np
 
 pygame.init()
 
-FPS = 200
+FPS = 200  # надо протестить как сделать PoolRequest
 screen = pygame.display.set_mode((1200, 600))
 
 RED = (255, 0, 0)
