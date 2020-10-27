@@ -208,7 +208,7 @@ class target():
         self.x += self.vx
         self.y += self.vy
 
-        if self.x >= 800 - self.r - 30 or self.x <= self.r + 20:
+        if self.x >= 800 - self.r * 1.2 or self.x <= self.r + 20:
             self.vx = - self.vx
         if self.y >= 600 - self.r - 10:
             self.vy = -self.vy
@@ -298,14 +298,14 @@ def new_game(event=''):
             for b in balls:
                 b.delete_ball()
             k = 0
-    print("1")
 
+    #canv.itemconfig(screen1, text='Цель была ликвидирована')
     canv.itemconfig(screen1, text='Цель была ликвидирована')
     time.sleep(1)
     canv.itemconfig(screen1, text='')
     canv.delete(gun)
     # t1 = target()
-    root.after(2, new_game)
+    root.after(1, new_game)
 
 
 while True:
