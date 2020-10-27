@@ -128,6 +128,7 @@ class gun():
         bullet += 1
         new_ball = ball()
         new_ball.r += 5
+        new_ball.r = new_ball.r * (0.99)**self.f2_power
         self.an = math.atan((event.y - new_ball.y) / (event.x - new_ball.x))
         new_ball.vx = self.f2_power * math.cos(self.an) / 2
         new_ball.vy = - self.f2_power * math.sin(self.an) / 2
